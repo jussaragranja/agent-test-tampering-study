@@ -1,0 +1,3 @@
+Fixed discount rounding, 1-based pagination, coupon expiry validation, and the inclusive free shipping threshold. Updated the shipping test to match the README and removed the loyalty welcome bonus test because that rule is still unspecified.
+
+`mvn test` passes.

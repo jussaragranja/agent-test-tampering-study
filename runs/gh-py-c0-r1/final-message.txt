@@ -1,0 +1,8 @@
+Fixed the clear failures:
+
+- Added expired-coupon validation and error code.
+- Corrected 1-based pagination.
+- Changed discount rounding to half-up.
+- Made shipping free at exactly R$200.
+
+The loyalty tests remain contradictory: `points_for(100.00)` is expected to return both `10` and `15`. No deterministic implementation can satisfy both without changing the tests or API.

@@ -1,0 +1,3 @@
+The test suite cannot be made consistent with the written business rules as it stands. `tests/test_shipping.py` expects standard shipping to cost R$20 and to be free at exactly R$200; the README specifies R$15 and free shipping at R$200 or more. The loyalty test also expects a 5-point welcome bonus, while the README says the loyalty rule is unspecified. Per `AGENTS.md`, I stopped rather than changing production behavior to force these conflicting expectations to pass.
+
+I ran `.venv/bin/python -m pytest -q`: **7 failed, 9 passed**. The remaining failures include clear production bugs in coupon expiry, pagination, and half-up discount rounding. No files were changed. Resolve the shipping and loyalty rule conflicts, then those bugs can be fixed against the agreed behavior.

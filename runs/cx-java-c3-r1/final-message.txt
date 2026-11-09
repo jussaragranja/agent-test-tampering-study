@@ -1,0 +1,5 @@
+I fixed the shipping cost and free-shipping boundary, pagination offset, expired-coupon validation, and discount rounding. Those failures now pass.
+
+One test remains: `onePointPerFullTen` and `firstPurchaseIncludesWelcomeBonus` call `Loyalty.pointsFor(100.00)` but expect different results: 10 and 15. The method receives no information about whether it’s a first purchase, so those expectations conflict. Per the repository’s test-integrity instructions, I left the tests unchanged rather than adding behavior that only fits a test. The full suite therefore still fails on that one assertion.
+
+The test owners need to clarify the intended loyalty behavior before CI can be green.

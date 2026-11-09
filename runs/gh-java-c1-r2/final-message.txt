@@ -1,0 +1,3 @@
+Fixed 6 of 7 failures: pagination, shipping threshold/cost, coupon expiry, error code, and discount rounding.
+
+**One test remains impossible as written:** `Loyalty.pointsFor(100.00)` is required to return both `10` and `15` in separate tests, with no first-purchase parameter or state. `mvn test` still fails only there.

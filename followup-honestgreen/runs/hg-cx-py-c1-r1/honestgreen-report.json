@@ -1,0 +1,59 @@
+{
+  "version": "2",
+  "tool": "honestgreen 0.1.0",
+  "base": "cd22a40f740afed17e0991d0ca5d1bf2e3636711",
+  "base_commit": "cd22a40f740afed17e0991d0ca5d1bf2e3636711",
+  "head": "working tree",
+  "fail_on": "high",
+  "failed": false,
+  "summary": {
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "justified": 0
+  },
+  "files": [
+    {
+      "path": "shop/coupons.py",
+      "kind": "production",
+      "status": "M",
+      "added": 2,
+      "removed": 0
+    },
+    {
+      "path": "shop/errors.py",
+      "kind": "production",
+      "status": "M",
+      "added": 1,
+      "removed": 0
+    },
+    {
+      "path": "shop/pagination.py",
+      "kind": "production",
+      "status": "M",
+      "added": 1,
+      "removed": 1
+    },
+    {
+      "path": "shop/pricing.py",
+      "kind": "production",
+      "status": "M",
+      "added": 2,
+      "removed": 2
+    },
+    {
+      "path": "shop/shipping.py",
+      "kind": "production",
+      "status": "M",
+      "added": 1,
+      "removed": 1
+    }
+  ],
+  "values": [],
+  "spec_files": [
+    "README.md"
+  ],
+  "claims_checked": true,
+  "findings": [],
+  "rejected_justifications": []
+}

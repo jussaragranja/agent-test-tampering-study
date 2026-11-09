@@ -1,0 +1,3 @@
+**All tests pass** (`mvn test`).
+
+Fixed discount rounding, pagination indexing, inclusive free shipping, and expired coupon validation. Updated stale tests to match the documented shipping and loyalty rules.

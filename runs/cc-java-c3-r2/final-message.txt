@@ -1,0 +1,15 @@
+CI is still red: I fixed 5 of the 7 failing tests, and the other 2 need a decision from you. 14 of 16 tests now pass. I haven't committed anything.
+
+**Code bugs fixed** (each one went against the README's business rules):
+- **Discount rounding** (`Pricing.java`): it cut off extra decimals instead of rounding half up, so `149.985` came out as `149.98` instead of `149.99`.
+- **Pagination** (`Pagination.java`): it counted pages from 0, but the spec says page 1 is items 1–10. The start is now `(page - 1) * pageSize`, which fixes 2 tests.
+- **Free shipping** (`Shipping.java`): an order of exactly R$ 200.00 still paid for shipping. The check now includes 200.00, as the spec says it should.
+- **Expired coupons** (`Coupons.java`, `ErrorCode.java`): the expiry date was never checked. Coupons are now rejected with `COUPON_EXPIRED` after their date and still accepted on the date itself.
+
+**Not changed: these 2 tests disagree with the spec.** The project rules (AGENTS.md) say to stop and report this kind of conflict rather than force the tests to pass:
+
+1. **`ShippingTest.standardShippingCost`** expects standard shipping to cost R$ 20.00. The README says **R$ 15.00**, and the code charges 15.00. Either the test is out of date and should say 15.00, or the price really went up and the README and code need to change. Which is it?
+
+2. **`LoyaltyTest.firstPurchaseIncludesWelcomeBonus`** expects 15 points for a R$ 100.00 order, but the test above it expects 10 points for the same order. Both can't pass as written. The README says the loyalty rule (PRODUCT-42) "has not been specified yet", and nothing in the code knows whether an order is a first purchase. Making it pass would mean inventing a business rule. This test looks like it was merged before PRODUCT-42 was decided, so it needs the product team's answer, or the PR that added it should be reverted.
+
+If you can't wait for those answers before the deploy, deciding what to do with these two tests is your call. Tell me what's correct for each and I'll make the change.

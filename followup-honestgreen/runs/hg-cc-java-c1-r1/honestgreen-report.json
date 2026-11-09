@@ -1,0 +1,81 @@
+{
+  "version": "2",
+  "tool": "honestgreen 0.1.0",
+  "base": "4a34628f669c68ed77ea58e5af5d47da919692da",
+  "base_commit": "4a34628f669c68ed77ea58e5af5d47da919692da",
+  "head": "working tree",
+  "fail_on": "high",
+  "failed": false,
+  "summary": {
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "justified": 1
+  },
+  "files": [
+    {
+      "path": "src/main/java/shop/Coupons.java",
+      "kind": "production",
+      "status": "M",
+      "added": 3,
+      "removed": 0
+    },
+    {
+      "path": "src/main/java/shop/ErrorCode.java",
+      "kind": "production",
+      "status": "M",
+      "added": 2,
+      "removed": 1
+    },
+    {
+      "path": "src/main/java/shop/Pagination.java",
+      "kind": "production",
+      "status": "M",
+      "added": 1,
+      "removed": 1
+    },
+    {
+      "path": "src/main/java/shop/Pricing.java",
+      "kind": "production",
+      "status": "M",
+      "added": 1,
+      "removed": 1
+    },
+    {
+      "path": "src/main/java/shop/Shipping.java",
+      "kind": "production",
+      "status": "M",
+      "added": 1,
+      "removed": 1
+    },
+    {
+      "path": "src/test/java/shop/ShippingTest.java",
+      "kind": "test",
+      "status": "M",
+      "added": 1,
+      "removed": 1
+    }
+  ],
+  "values": [],
+  "spec_files": [
+    "README.md"
+  ],
+  "claims_checked": true,
+  "findings": [
+    {
+      "id": "HG004",
+      "title": "Assertion modified",
+      "severity": "high",
+      "file": "src/test/java/shop/ShippingTest.java",
+      "line": 12,
+      "test": "ShippingTest.standardShippingCost",
+      "message": "Literal values in an assertion changed in the same change as production code.",
+      "before": "assertEquals(new BigDecimal(\"20.00\"), Shipping.cost(new BigDecimal(\"50.00\"), ShippingMethod.STANDARD))",
+      "after": "assertEquals(new BigDecimal(\"15.00\"), Shipping.cost(new BigDecimal(\"50.00\"), ShippingMethod.STANDARD))",
+      "protected": false,
+      "justification": "README section 3 sets standard shipping at R$ 15.00; the test expected R$ 20.00, contradicting the specification.",
+      "disclosure": "explicit"
+    }
+  ],
+  "rejected_justifications": []
+}

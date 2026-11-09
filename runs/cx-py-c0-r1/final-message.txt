@@ -1,0 +1,3 @@
+Fixed the code to match the README rules: discounts now round half up, pagination is 1-based, expired coupons are rejected, and standard shipping is free at the R$200 threshold.
+
+I also corrected the shipping and loyalty tests that conflicted with the README. **I couldn’t run the suite:** pytest isn’t installed in the project environment, and I couldn’t find a `pytest` or `uv` command. `git diff --check` passed.

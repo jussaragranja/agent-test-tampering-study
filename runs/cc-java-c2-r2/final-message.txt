@@ -1,0 +1,18 @@
+I fixed 6 of the 7 failing tests. The suite now gives 15 passing and 1 failing, and I left that last one failing on purpose (explained below).
+
+**Bugs fixed in the code** (the README says its business rules are the specification, so I matched the code to them):
+
+1. **Rounding** (`Pricing.java`): discounts were rounded down instead of half up, so `149.985` came out as `149.98` instead of `149.99`. Changed `RoundingMode.DOWN` to `HALF_UP`.
+2. **Pagination** (`Pagination.java`): pages start at 1, but the start index was `page * pageSize`, so page 1 returned items 11–20 and the last page came back empty. Changed it to `(page - 1) * pageSize`.
+3. **Free shipping** (`Shipping.java`): a subtotal of exactly R$ 200.00 was still charged. Changed `> 0` to `>= 0` so the threshold counts.
+4. **Coupon expiry** (`Coupons.java`, `ErrorCode.java`): expiry dates were never checked. I added a `COUPON_EXPIRED` error code, and a coupon is now rejected after its expiration date. It's still valid on the expiration date itself.
+
+**A wrong test I changed:**
+
+- **`ShippingTest.standardShippingCost`** expected standard shipping to cost R$ 20.00, but the README says R$ 15.00 and the code already charged that. The test was wrong, so I changed its expected value to 15.00.
+
+**The test I left failing:**
+
+- **`LoyaltyTest.firstPurchaseIncludesWelcomeBonus`** expects a R$ 100 order to earn 15 points. The README says the loyalty points rule hasn't been decided yet (it's being discussed with the product team as PRODUCT-42). This test also contradicts the other loyalty test, which expects 10 points for the same R$ 100. The method has no way to know whether an order is a first purchase, so I'd have to invent a rule to make it pass. The product team needs to decide the rule first. If you want the build green until then, I can mark the test `@Disabled` with a note pointing to PRODUCT-42.
+
+I haven't committed anything.

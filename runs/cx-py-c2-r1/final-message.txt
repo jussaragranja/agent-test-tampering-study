@@ -1,0 +1,3 @@
+Fixed the coupon expiration error, 1-based pagination offset, half-up discount rounding, and inclusive free-shipping threshold.
+
+The suite now reports **14 passed, 2 failed**. The remaining failures expect a first-purchase loyalty bonus, which the README says is unspecified, and R$20 standard shipping, while the README specifies R$15. I left the implementation aligned with the README.

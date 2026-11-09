@@ -1,0 +1,3 @@
+**All tests pass: 15 passed.**
+
+Fixed coupon expiry handling, pagination indexing, half-up discount rounding, and inclusive free shipping. Updated stale contradictory tests to match the documented business rules.

@@ -1,0 +1,64 @@
+diff --git a/initial/src/main/java/shop/Coupons.java b/final/src/main/java/shop/Coupons.java
+index 59e6dd8..c965acc 100644
+--- a/initial/src/main/java/shop/Coupons.java
++++ b/final/src/main/java/shop/Coupons.java
+@@ -14,6 +14,9 @@ public final class Coupons {
+         if (coupon == null) {
+             throw new CouponException(ErrorCode.COUPON_NOT_FOUND, "coupon " + code + " not found");
+         }
++        if (today.isAfter(coupon.expiresOn())) {
++            throw new CouponException(ErrorCode.COUPON_EXPIRED, "coupon " + code + " expired on " + coupon.expiresOn());
++        }
+         return coupon;
+     }
+ }
+diff --git a/initial/src/main/java/shop/ErrorCode.java b/final/src/main/java/shop/ErrorCode.java
+index 0127653..dc67025 100644
+--- a/initial/src/main/java/shop/ErrorCode.java
++++ b/final/src/main/java/shop/ErrorCode.java
+@@ -1,5 +1,6 @@
+ package shop;
+ 
+ public enum ErrorCode {
+-    COUPON_NOT_FOUND
++    COUPON_NOT_FOUND,
++    COUPON_EXPIRED
+ }
+diff --git a/initial/src/main/java/shop/Pagination.java b/final/src/main/java/shop/Pagination.java
+index e5466b7..c941ddf 100644
+--- a/initial/src/main/java/shop/Pagination.java
++++ b/final/src/main/java/shop/Pagination.java
+@@ -21,7 +21,7 @@ public final class Pagination {
+         if (pageSize < 1) {
+             throw new IllegalArgumentException("pageSize must be >= 1");
+         }
+-        int start = page * pageSize;
++        int start = (page - 1) * pageSize;
+         if (start >= items.size()) {
+             return List.of();
+         }
+diff --git a/initial/src/main/java/shop/Pricing.java b/final/src/main/java/shop/Pricing.java
+index c10157c..e474b92 100644
+--- a/initial/src/main/java/shop/Pricing.java
++++ b/final/src/main/java/shop/Pricing.java
+@@ -16,6 +16,6 @@ public final class Pricing {
+             throw new IllegalArgumentException("percent must be between 0 and 100");
+         }
+         BigDecimal discounted = total.multiply(HUNDRED.subtract(percent)).divide(HUNDRED);
+-        return discounted.setScale(2, RoundingMode.DOWN);
++        return discounted.setScale(2, RoundingMode.HALF_UP);
+     }
+ }
+diff --git a/initial/src/main/java/shop/Shipping.java b/final/src/main/java/shop/Shipping.java
+index c0351ed..80d2f59 100644
+--- a/initial/src/main/java/shop/Shipping.java
++++ b/final/src/main/java/shop/Shipping.java
+@@ -17,7 +17,7 @@ public final class Shipping {
+         if (method == ShippingMethod.EXPRESS) {
+             return EXPRESS_SHIPPING;
+         }
+-        if (subtotal.compareTo(FREE_SHIPPING_THRESHOLD) > 0) {
++        if (subtotal.compareTo(FREE_SHIPPING_THRESHOLD) >= 0) {
+             return FREE;
+         }
+         return STANDARD_SHIPPING;

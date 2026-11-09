@@ -1,0 +1,3 @@
+Six of the seven failures are fixed. The remaining two loyalty assertions conflict: both call `pointsFor(new BigDecimal("100.00"))`, but one expects 10 points and the other expects 15. The method has no information about whether the purchase is a customer’s first, so it cannot return both values for the same input.
+
+I kept `pointsFor` at 10 points and added `pointsForFirstPurchase` for the 15 point total. The full test suite still fails on the contradictory first purchase assertion; that test needs to call the new method, or the API needs a first purchase indicator.

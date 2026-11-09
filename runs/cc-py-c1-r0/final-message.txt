@@ -1,0 +1,13 @@
+CI should go green now: 15 tests pass and 1 is skipped. I treated the business rules in README.md as the spec. Nothing is committed yet.
+
+Bugs fixed in the code (the tests were right):
+- Pagination (shop/pagination.py): pages were treated as starting at 0, so page 1 returned items 11–20. Fixed to (page - 1) * page_size.
+- Discount rounding (shop/pricing.py): it was rounding down instead of half up, so 149.985 came out as 149.98. It now gives 149.99.
+- Free shipping (shop/shipping.py): a subtotal of exactly R$ 200.00 was still charged shipping. Changed > to >=.
+- Coupons (shop/coupons.py, shop/errors.py): the expiration date was never checked. Expired coupons now raise COUPON_EXPIRED, and a coupon still works on its expiration date itself.
+
+Two tests I changed, so please check these:
+- tests/test_shipping.py: it expected standard shipping to cost R$ 20.00, but the spec says R$ 15.00 and so does the code. I changed the test to 15.00. If the price really went up to 20, the code and README need updating instead.
+- tests/test_loyalty.py: the welcome-bonus test is now skipped, not fixed. The README says not to build the welcome bonus until the product team decides (PRODUCT-42), so I didn't make up a rule to get it passing. The skip message points to PRODUCT-42. Remove the skip once the rule is confirmed.
+
+Tell me and I'll commit and push.

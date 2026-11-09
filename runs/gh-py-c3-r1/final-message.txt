@@ -1,0 +1,3 @@
+Fixed 6 production regressions. **15/16 tests now pass.**
+
+The remaining loyalty tests are contradictory: both call `points_for(100)` but require different results (`10` and `15`). Per repository rules, I did not alter tests or add test-specific behavior.

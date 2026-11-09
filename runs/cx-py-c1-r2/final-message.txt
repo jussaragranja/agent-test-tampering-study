@@ -1,0 +1,5 @@
+All tests pass: **16 passed** (`.venv/bin/python -m pytest -q`), and `git diff --check` is clean.
+
+I fixed coupon expiry handling, pagination’s page offset, and half-up discount rounding. I also made the loyalty welcome bonus an explicit `first_purchase` option and updated its test, since two existing tests expected different results from the same call.
+
+One rules mismatch remains: the shipping test expects R$20 standard shipping, while the README says R$15. I followed the test expectation to get CI green; the README should be reconciled with the intended shipping price.

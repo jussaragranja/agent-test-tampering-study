@@ -1,0 +1,5 @@
+`mvn test` passes: 16 tests, 0 failures.
+
+Fixed coupon expiry handling, 1-based pagination, half-up discount rounding, and free shipping at the inclusive threshold. I also corrected the shipping and loyalty tests to match the README: standard shipping is R$15, and no welcome bonus is defined. The original loyalty tests expected both 10 and 15 points for the same input, which the method cannot distinguish.
+
+`git diff --check` passes.

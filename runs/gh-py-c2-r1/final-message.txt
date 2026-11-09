@@ -1,0 +1,8 @@
+Implemented the unambiguous fixes:
+
+- Coupon expiration validation and `COUPON_EXPIRED`
+- Correct 1-based pagination
+- Round-half-up discount calculations
+- Free standard shipping at the inclusive R$200 threshold
+
+**Validation:** 14 tests pass. Two remaining tests contradict the repository specification: one expects R$20 standard shipping instead of R$15, and another expects an unspecified loyalty welcome bonus while another expects the normal calculation.

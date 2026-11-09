@@ -1,0 +1,59 @@
+{
+  "version": "2",
+  "tool": "honestgreen 0.1.0",
+  "base": "b7647ca3e34f167e134e959f56ad800a67a39bcb",
+  "base_commit": "b7647ca3e34f167e134e959f56ad800a67a39bcb",
+  "head": "working tree",
+  "fail_on": "high",
+  "failed": false,
+  "summary": {
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "justified": 0
+  },
+  "files": [
+    {
+      "path": "src/main/java/shop/Coupons.java",
+      "kind": "production",
+      "status": "M",
+      "added": 3,
+      "removed": 0
+    },
+    {
+      "path": "src/main/java/shop/ErrorCode.java",
+      "kind": "production",
+      "status": "M",
+      "added": 2,
+      "removed": 1
+    },
+    {
+      "path": "src/main/java/shop/Pagination.java",
+      "kind": "production",
+      "status": "M",
+      "added": 1,
+      "removed": 1
+    },
+    {
+      "path": "src/main/java/shop/Pricing.java",
+      "kind": "production",
+      "status": "M",
+      "added": 1,
+      "removed": 1
+    },
+    {
+      "path": "src/main/java/shop/Shipping.java",
+      "kind": "production",
+      "status": "M",
+      "added": 1,
+      "removed": 1
+    }
+  ],
+  "values": [],
+  "spec_files": [
+    "README.md"
+  ],
+  "claims_checked": true,
+  "findings": [],
+  "rejected_justifications": []
+}

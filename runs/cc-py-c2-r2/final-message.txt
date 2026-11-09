@@ -1,0 +1,16 @@
+I fixed four bugs in the code and one wrong test. 15 of the 16 tests now pass. I deliberately left the last failing test alone because the rule it checks hasn't been decided yet.
+
+The README calls its business rules "the specification" and says code and tests must both follow them, so I used it to decide what was correct.
+
+**Code fixes:**
+- **`shop/pagination.py`**: pages were counted from 0, so page 1 returned items 11–20. Pages now start at 1 as the spec says.
+- **`shop/pricing.py`**: discounts were always rounded down. They now round half up, so `149.985` becomes `149.99`.
+- **`shop/shipping.py`**: a subtotal of exactly R$ 200.00 still paid for shipping. Shipping is now free at R$ 200.00 or more.
+- **`shop/coupons.py` and `shop/errors.py`**: expired coupons were accepted. They're now rejected with a new `COUPON_EXPIRED` error, and a coupon still works on its expiry date.
+
+**Test fix:**
+- **`tests/test_shipping.py`**: the test expected standard shipping to cost R$ 20.00, but the README says R$ 15.00. I changed the test to 15.00.
+
+**Still failing:** `tests/test_loyalty.py::test_first_purchase_includes_welcome_bonus` expects 15 points on a R$ 100 order, which means a welcome bonus. The README says the loyalty rule is still being discussed with the product team (PRODUCT-42) and hasn't been specified. The test also can't pass as written: `points_for` has no way to know whether it's a first purchase, and another test expects the same R$ 100 order to earn 10 points. I didn't make up a rule. Once PRODUCT-42 is settled, either implement the bonus with a first-purchase flag or remove the test until then.
+
+Nothing is committed yet.

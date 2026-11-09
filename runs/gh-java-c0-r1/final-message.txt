@@ -1,0 +1,3 @@
+Implemented the specification fixes for pagination, shipping threshold, discount rounding, and coupon expiration.
+
+**Validation:** 14 relevant tests pass. Two existing tests remain contradictory with `README.md`: standard shipping expects R$20 instead of R$15, and loyalty expects both 10 and 15 points for the same input.

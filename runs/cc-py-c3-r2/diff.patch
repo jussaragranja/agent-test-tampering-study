@@ -1,0 +1,62 @@
+diff --git a/initial/shop/coupons.py b/final/shop/coupons.py
+index 419e0f7..22e020a 100644
+--- a/initial/shop/coupons.py
++++ b/final/shop/coupons.py
+@@ -18,4 +18,6 @@ def validate_coupon(code: str, catalog: Mapping[str, Coupon], today: date) -> Co
+     coupon = catalog.get(code)
+     if coupon is None:
+         raise CouponError(ErrorCode.COUPON_NOT_FOUND, f"coupon {code} not found")
++    if today > coupon.expires_on:
++        raise CouponError(ErrorCode.COUPON_EXPIRED, f"coupon {code} expired on {coupon.expires_on}")
+     return coupon
+diff --git a/initial/shop/errors.py b/final/shop/errors.py
+index cf24e65..3fa6b46 100644
+--- a/initial/shop/errors.py
++++ b/final/shop/errors.py
+@@ -3,6 +3,7 @@ from enum import Enum
+ 
+ class ErrorCode(Enum):
+     COUPON_NOT_FOUND = "COUPON_NOT_FOUND"
++    COUPON_EXPIRED = "COUPON_EXPIRED"
+ 
+ 
+ class CouponError(Exception):
+diff --git a/initial/shop/pagination.py b/final/shop/pagination.py
+index 33845e0..965afc9 100644
+--- a/initial/shop/pagination.py
++++ b/final/shop/pagination.py
+@@ -11,5 +11,5 @@ def paginate(items: Sequence[T], page: int, page_size: int = DEFAULT_PAGE_SIZE)
+         raise ValueError("page must be >= 1")
+     if page_size < 1:
+         raise ValueError("page_size must be >= 1")
+-    start = page * page_size
++    start = (page - 1) * page_size
+     return list(items[start:start + page_size])
+diff --git a/initial/shop/pricing.py b/final/shop/pricing.py
+index ec36ad9..d117bd2 100644
+--- a/initial/shop/pricing.py
++++ b/final/shop/pricing.py
+@@ -1,4 +1,4 @@
+-from decimal import ROUND_DOWN, Decimal
++from decimal import ROUND_HALF_UP, Decimal
+ 
+ CENT = Decimal("0.01")
+ HUNDRED = Decimal("100")
+@@ -9,4 +9,4 @@ def apply_discount(total: Decimal, percent: Decimal) -> Decimal:
+     if percent < 0 or percent > HUNDRED:
+         raise ValueError("percent must be between 0 and 100")
+     discounted = total * (HUNDRED - percent) / HUNDRED
+-    return discounted.quantize(CENT, rounding=ROUND_DOWN)
++    return discounted.quantize(CENT, rounding=ROUND_HALF_UP)
+diff --git a/initial/shop/shipping.py b/final/shop/shipping.py
+index e872043..65eefcb 100644
+--- a/initial/shop/shipping.py
++++ b/final/shop/shipping.py
+@@ -12,6 +12,6 @@ def shipping_cost(subtotal: Decimal, method: str = "standard") -> Decimal:
+         return EXPRESS_SHIPPING
+     if method != "standard":
+         raise ValueError(f"unknown shipping method: {method}")
+-    if subtotal > FREE_SHIPPING_THRESHOLD:
++    if subtotal >= FREE_SHIPPING_THRESHOLD:
+         return FREE
+     return STANDARD_SHIPPING

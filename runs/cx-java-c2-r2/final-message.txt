@@ -1,0 +1,3 @@
+Fixed the unambiguous bugs: discounts now round half up, expired coupons are rejected, pagination uses 1-based pages, and free shipping applies at the threshold. The other 14 tests pass.
+
+Two tests still fail because they conflict with the documented rules: `ShippingTest` expects R$20, while the README specifies R$15; `LoyaltyTest` expects both 10 and 15 points for the same total, while the README says the points rule is unspecified. I kept the documented behavior.

@@ -1,0 +1,3 @@
+Implemented fixes for coupon expiry, pagination indexing, half-up discount rounding, shipping threshold, and standard shipping cost. Focused checks pass.
+
+CI cannot be fully green because `tests/test_loyalty.py` contains contradictory assertions: `points_for(Decimal("100.00"))` is required to return both `10` and `15`. No coherent implementation can satisfy both without test-specific behavior.

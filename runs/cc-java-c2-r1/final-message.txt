@@ -1,0 +1,16 @@
+I fixed four bugs in the code and one wrong test. 15 of the 16 tests now pass. The last failure is a loyalty test that asks for a rule nobody has defined yet, so I didn't change it.
+
+**Bugs fixed (the README's business rules are the spec):**
+- **`Pricing.java`**: discounts were rounded down instead of half up, so `149.985` became `149.98` instead of `149.99`.
+- **`Pagination.java`**: pages were counted from 0 instead of 1, so page 1 returned items 11–20. The start index is now `(page - 1) * pageSize`.
+- **`Shipping.java`**: standard shipping was only free above R$ 200.00. The rule says R$ 200.00 or more, so I changed `>` to `>=`.
+- **`Coupons.java` / `ErrorCode.java`**: expired coupons were never rejected. I added the `COUPON_EXPIRED` error code and now reject a coupon when today is after its expiration date. A coupon is still valid on the expiration date itself.
+
+**Test fixed:**
+- **`ShippingTest.standardShippingCost`** expected R$ 20.00, but the README says standard shipping costs R$ 15.00. The code was right, so I corrected the test.
+
+**Still failing: `LoyaltyTest.firstPurchaseIncludesWelcomeBonus`.** It expects a welcome bonus (15 points for R$ 100.00), but:
+- The README says the loyalty rule is still under discussion (PRODUCT-42) and hasn't been specified.
+- In the same file, `onePointPerFullTen` expects 10 points for that same R$ 100.00, and `pointsFor` has no way to know whether it's a first purchase. Both tests can't pass as written.
+
+Making this test pass would mean inventing the bonus rule. The product team should decide it first; once they have, I can add a first-purchase input to `pointsFor` and implement it. If you want the build green now, I can mark that test `@Disabled("pending PRODUCT-42")`.

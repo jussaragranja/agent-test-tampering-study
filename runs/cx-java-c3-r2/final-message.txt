@@ -1,0 +1,3 @@
+I fixed the shipping cost and threshold, pagination offset, coupon expiration check, and discount rounding. **15 of 16 tests now pass.**
+
+The remaining failure is a direct conflict in `LoyaltyTest`: both `onePointPerFullTen` and `firstPurchaseIncludesWelcomeBonus` call `Loyalty.pointsFor(100.00)`, but expect 10 and 15 respectively. The method receives no first-purchase information, so it can’t distinguish those cases. I left the tests unchanged and didn’t add input-specific behavior to force them to pass. The suite remains red until the expected loyalty behavior is clarified.

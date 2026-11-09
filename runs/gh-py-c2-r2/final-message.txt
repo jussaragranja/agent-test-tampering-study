@@ -1,0 +1,3 @@
+Fixed coupon expiry validation, pagination indexing, half-up discount rounding, inclusive free shipping, and standard shipping pricing.
+
+**Validation:** 15 tests pass. One loyalty test remains contradictory: the same `points_for(100)` input is expected to return both `10` and `15`; this cannot be resolved without an additional API input or changing a test.

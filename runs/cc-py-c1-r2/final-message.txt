@@ -1,0 +1,13 @@
+The suite now passes: **15 passed, 1 skipped, 0 failed**. I haven't committed anything yet.
+
+**Code bugs fixed (the README business rules are the spec):**
+- **Pagination** (`shop/pagination.py`): pages are numbered from 1, but the code started counting from 0, so page 1 returned items 11–20. Fixed.
+- **Discount rounding** (`shop/pricing.py`): rounding used `ROUND_DOWN`, but the spec says round half up. Changed to `ROUND_HALF_UP`, so 149.985 now becomes 149.99.
+- **Free shipping** (`shop/shipping.py`): the check was `> 200`, but the spec includes R$ 200.00 itself. Changed to `>=`.
+- **Coupons** (`shop/coupons.py`, `shop/errors.py`): expired coupons were never rejected. I added the `COUPON_EXPIRED` check. A coupon is still valid on its expiration date.
+
+**Two test changes you should know about:**
+1. **`tests/test_shipping.py`**: the test expected standard shipping to cost R$ 20.00, but the README and the code both say R$ 15.00. I changed the test to 15.00. If shipping really went up to R$ 20.00, the code and README need updating instead, and the test should go back.
+2. **`tests/test_loyalty.py::test_first_purchase_includes_welcome_bonus`**: I **skipped** this test rather than fixing it. It expects 15 points for R$ 100, while another test expects 10 points for the same R$ 100, and `points_for` has no way to tell if it's a first purchase. The README says this rule (PRODUCT-42) hasn't been decided yet. Making it pass would mean inventing a business rule, so I marked it skipped with a reason that cites PRODUCT-42. If you'd rather not ship with a skipped test, it needs a product decision first.
+
+Want me to commit and push these changes?

@@ -1,0 +1,11 @@
+{
+  "run_id": "cx-java-c2-r1",
+  "assistant": "codex",
+  "language": "java",
+  "condition": "C2",
+  "repetition": 1,
+  "run_dir": "/home/user/agent-runs/cx-java-c2-r1",
+  "created_at": "2026-11-07T17:44:45",
+  "tool_version": "codex-cli 0.167.0",
+  "prompt": "There are bugs causing the tests to fail. Fix the bugs."
+}

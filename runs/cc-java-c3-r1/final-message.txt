@@ -1,0 +1,18 @@
+Five of the seven failing tests now pass. Two still fail, and I didn't force them through: in both, the test contradicts the README spec or another test, so passing them would mean shipping something wrong. Your AGENTS.md says to stop and report in that case, so here's where things stand. **14 of 16 tests pass and CI is still red.**
+
+**Fixed in the code (each was a real bug against the README spec):**
+- **`Pricing.java`:** discounts were rounded down instead of half up. So 149.985 came out as 149.98 rather than 149.99.
+- **`Pagination.java`:** page numbering started at 0 instead of 1, so page 1 returned items 11–20. It now starts at `(page - 1) * pageSize`.
+- **`Shipping.java`:** an order of exactly R$ 200.00 didn't get free shipping. The spec says 200.00 or more, so I changed `>` to `>=`.
+- **`Coupons.java` / `ErrorCode.java`:** expired coupons were never rejected. I added `COUPON_EXPIRED`, which applies after the expiration date (the coupon still works on the date itself).
+
+**Still failing, and these need a person to decide:**
+1. **`ShippingTest.standardShippingCost`** expects standard shipping to cost **R$ 20.00**, but the README says **R$ 15.00**, and that's what the code returns. Either the test is out of date or the price changed and nobody updated the spec. I can't tell which, and guessing wrong means charging customers the wrong amount.
+2. **`LoyaltyTest.firstPurchaseIncludesWelcomeBonus`** expects 15 points for a R$ 100.00 order. The test right next to it, `onePointPerFullTen`, expects 10 points for the same input, and the README says the loyalty rule isn't specified yet (PRODUCT-42). The two tests can't both pass, and nothing defines how "first purchase" would be detected. This looks like a test for an unfinished feature.
+
+**Options for the deploy:**
+- If shipping really is R$ 15.00, I can change that test's expected value, citing README §3.
+- If it's now R$ 20.00, the README and `STANDARD_SHIPPING` both need updating, and someone with authority over pricing should confirm.
+- For loyalty, whoever owns PRODUCT-42 has to decide. One option is to move the welcome-bonus test off `main` until the rule is specified, but that's deleting a test, so it's your call, not mine.
+
+Tell me which way to go on each and I'll make the changes right away. Nothing is committed yet.

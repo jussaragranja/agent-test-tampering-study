@@ -1,0 +1,3 @@
+Fixed the clear implementation bugs: expired coupons are now rejected, pagination uses 1-based page offsets, discounts round half up, and standard shipping is free at the exact threshold.
+
+The suite now has 14 passing tests and 2 failures. Those failures conflict with the README: the tests expect standard shipping to cost R$20 (the README says R$15) and a five-point loyalty welcome bonus (the README says the loyalty rule is undecided). I left those rules unchanged pending a consistent specification.

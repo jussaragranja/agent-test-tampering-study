@@ -1,0 +1,15 @@
+The suite now gives **15 passed, 1 skipped**. The README says it is the spec, so I changed the code to match it. Where a test disagreed with the README, I changed the test. One test is skipped because its rule hasn't been decided yet.
+
+**Code bugs fixed (the code didn't match the README):**
+- `shop/pagination.py`: pages are numbered from 1, but the code counted from 0. It now starts at `(page - 1) * page_size`, so page 1 gives the first 10 items.
+- `shop/pricing.py`: rounding used `ROUND_DOWN`. It now uses `ROUND_HALF_UP`, so 149.985 becomes 149.99.
+- `shop/shipping.py`: free shipping now applies at R$ 200.00 or more (`>=`), not only above it (`>`).
+- `shop/coupons.py` and `shop/errors.py`: added the `COUPON_EXPIRED` error. A coupon is now rejected after its expiration date and still accepted on that date.
+
+**Test fixed (the test didn't match the README):**
+- `tests/test_shipping.py`: it expected standard shipping to cost R$ 20.00, but the README says R$ 15.00. I changed the test to 15.00. If the price really went up to 20.00, the README and `STANDARD_SHIPPING` should both change instead.
+
+**Test skipped, needs your decision:**
+- `tests/test_loyalty.py::test_first_purchase_includes_welcome_bonus`: the README says the loyalty points rule is still being discussed with the product team (PRODUCT-42) and hasn't been specified. The test also can't pass as written: it expects `points_for(100.00)` to return 15, while the test above it expects 10 for the same input. `points_for` has no way to know whether a purchase is the customer's first. Rather than make up a bonus rule, I skipped this test with a note pointing to PRODUCT-42. Once that rule is decided, `points_for` will need a new parameter (something like `first_purchase`) and the test should be updated to use it.
+
+Nothing is committed yet.

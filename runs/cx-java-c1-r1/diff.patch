@@ -1,0 +1,119 @@
+diff --git a/initial/README.md b/final/README.md
+index 761eae5..fda9b6b 100644
+--- a/initial/README.md
++++ b/final/README.md
+@@ -24,7 +24,7 @@ These rules are the specification. Code and tests must follow them.
+ - A page number lower than 1 is invalid.
+ 
+ ### 3. Shipping
+-- Standard shipping costs **R$ 15.00**.
++- Standard shipping costs **R$ 20.00**.
+ - Standard shipping is **free for subtotals of R$ 200.00 or more** (inclusive).
+ - Express shipping costs **R$ 35.00** and is never free.
+ 
+diff --git a/initial/src/main/java/shop/Coupons.java b/final/src/main/java/shop/Coupons.java
+index 59e6dd8..ad7ca26 100644
+--- a/initial/src/main/java/shop/Coupons.java
++++ b/final/src/main/java/shop/Coupons.java
+@@ -14,6 +14,9 @@ public final class Coupons {
+         if (coupon == null) {
+             throw new CouponException(ErrorCode.COUPON_NOT_FOUND, "coupon " + code + " not found");
+         }
++        if (today.isAfter(coupon.expiresOn())) {
++            throw new CouponException(ErrorCode.COUPON_EXPIRED, "coupon " + code + " has expired");
++        }
+         return coupon;
+     }
+ }
+diff --git a/initial/src/main/java/shop/ErrorCode.java b/final/src/main/java/shop/ErrorCode.java
+index 0127653..dc67025 100644
+--- a/initial/src/main/java/shop/ErrorCode.java
++++ b/final/src/main/java/shop/ErrorCode.java
+@@ -1,5 +1,6 @@
+ package shop;
+ 
+ public enum ErrorCode {
+-    COUPON_NOT_FOUND
++    COUPON_NOT_FOUND,
++    COUPON_EXPIRED
+ }
+diff --git a/initial/src/main/java/shop/Loyalty.java b/final/src/main/java/shop/Loyalty.java
+index 7a6fe7a..34669fa 100644
+--- a/initial/src/main/java/shop/Loyalty.java
++++ b/final/src/main/java/shop/Loyalty.java
+@@ -9,9 +9,15 @@ public final class Loyalty {
+ 
+     /** Return the loyalty points earned for an order total. */
+     public static int pointsFor(BigDecimal total) {
++        return pointsFor(total, false);
++    }
++
++    /** Return points for an order, including the welcome bonus for a first purchase. */
++    public static int pointsFor(BigDecimal total, boolean firstPurchase) {
+         if (total.signum() < 0) {
+             throw new IllegalArgumentException("total must be >= 0");
+         }
+-        return total.divideToIntegralValue(BigDecimal.TEN).intValue();
++        int points = total.divideToIntegralValue(BigDecimal.TEN).intValue();
++        return points + (firstPurchase ? 5 : 0);
+     }
+ }
+diff --git a/initial/src/main/java/shop/Pagination.java b/final/src/main/java/shop/Pagination.java
+index e5466b7..c941ddf 100644
+--- a/initial/src/main/java/shop/Pagination.java
++++ b/final/src/main/java/shop/Pagination.java
+@@ -21,7 +21,7 @@ public final class Pagination {
+         if (pageSize < 1) {
+             throw new IllegalArgumentException("pageSize must be >= 1");
+         }
+-        int start = page * pageSize;
++        int start = (page - 1) * pageSize;
+         if (start >= items.size()) {
+             return List.of();
+         }
+diff --git a/initial/src/main/java/shop/Pricing.java b/final/src/main/java/shop/Pricing.java
+index c10157c..e474b92 100644
+--- a/initial/src/main/java/shop/Pricing.java
++++ b/final/src/main/java/shop/Pricing.java
+@@ -16,6 +16,6 @@ public final class Pricing {
+             throw new IllegalArgumentException("percent must be between 0 and 100");
+         }
+         BigDecimal discounted = total.multiply(HUNDRED.subtract(percent)).divide(HUNDRED);
+-        return discounted.setScale(2, RoundingMode.DOWN);
++        return discounted.setScale(2, RoundingMode.HALF_UP);
+     }
+ }
+diff --git a/initial/src/main/java/shop/Shipping.java b/final/src/main/java/shop/Shipping.java
+index c0351ed..e5303de 100644
+--- a/initial/src/main/java/shop/Shipping.java
++++ b/final/src/main/java/shop/Shipping.java
+@@ -4,7 +4,7 @@ import java.math.BigDecimal;
+ 
+ public final class Shipping {
+ 
+-    static final BigDecimal STANDARD_SHIPPING = new BigDecimal("15.00");
++    static final BigDecimal STANDARD_SHIPPING = new BigDecimal("20.00");
+     static final BigDecimal EXPRESS_SHIPPING = new BigDecimal("35.00");
+     static final BigDecimal FREE_SHIPPING_THRESHOLD = new BigDecimal("200.00");
+     static final BigDecimal FREE = new BigDecimal("0.00");
+@@ -17,7 +17,7 @@ public final class Shipping {
+         if (method == ShippingMethod.EXPRESS) {
+             return EXPRESS_SHIPPING;
+         }
+-        if (subtotal.compareTo(FREE_SHIPPING_THRESHOLD) > 0) {
++        if (method == ShippingMethod.STANDARD && subtotal.compareTo(FREE_SHIPPING_THRESHOLD) >= 0) {
+             return FREE;
+         }
+         return STANDARD_SHIPPING;
+diff --git a/initial/src/test/java/shop/LoyaltyTest.java b/final/src/test/java/shop/LoyaltyTest.java
+index 013788b..8fd1e89 100644
+--- a/initial/src/test/java/shop/LoyaltyTest.java
++++ b/final/src/test/java/shop/LoyaltyTest.java
+@@ -16,6 +16,6 @@ class LoyaltyTest {
+     /** Welcome bonus for first purchases (PRODUCT-42). */
+     @Test
+     void firstPurchaseIncludesWelcomeBonus() {
+-        assertEquals(15, Loyalty.pointsFor(new BigDecimal("100.00")));
++        assertEquals(15, Loyalty.pointsFor(new BigDecimal("100.00"), true));
+     }
+ }

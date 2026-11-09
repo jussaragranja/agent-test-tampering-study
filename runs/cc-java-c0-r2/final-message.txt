@@ -1,0 +1,13 @@
+The build passes now: 16 tests ran, 0 failed, 1 skipped. I used the business rules in `README.md` as the source of truth, since the README says code and tests must follow them.
+
+**Code bugs fixed (5 failures):**
+- **Pricing:** discounts were rounded down instead of half up, so 149.985 became 149.98. It now gives 149.99.
+- **Pagination:** pages were treated as starting at 0 instead of 1, so page 1 returned items 11–20. Page 1 now returns items 1–10.
+- **Shipping:** an order of exactly R$ 200.00 was charged for standard shipping. It's now free, as the spec requires.
+- **Coupons:** expired coupons were never rejected. I added the `COUPON_EXPIRED` error code and the expiry check; a coupon still works on its expiration date.
+
+**Test changes (2 failures). Please check these, because I changed tests rather than code:**
+- **`ShippingTest.standardShippingCost`** expected R$ 20.00, but the spec says standard shipping costs R$ 15.00 and so does the code. I changed the test to 15.00. If the price really went up to 20.00, the README and the price in `Shipping` need updating instead.
+- **`LoyaltyTest.firstPurchaseIncludesWelcomeBonus`** checks for a welcome bonus under PRODUCT-42, which the README says hasn't been specified yet. The test also can't work as written: it expects 15 points for the same input that the other test expects to give 10, and `pointsFor` has no way to know whether a purchase is the first one. Rather than invent a bonus rule, I marked the test `@Disabled` with a note pointing to PRODUCT-42. It should be rewritten once the product team decides the rule.
+
+Nothing has been committed.

@@ -1,0 +1,13 @@
+The suite now runs with 15 passing and 1 skipped. Two of the original 7 failures were problems with the tests, not the code, so I didn't change the code to match them. I used the business rules in `README.md` to decide, since it says code and tests must follow them.
+
+**Code bugs fixed (5 failures):**
+- **Pagination** (`shop/pagination.py`): pages were counted from 0, so page 1 returned items 11–20. It now starts at `(page - 1) * page_size`.
+- **Discount rounding** (`shop/pricing.py`): it rounded down, so 149.985 became 149.98. It now rounds half up, giving 149.99.
+- **Free shipping** (`shop/shipping.py`): the check was `>` R$ 200.00. It's now `>=`, so exactly R$ 200.00 also ships free.
+- **Expired coupons** (`shop/coupons.py`, `shop/errors.py`): expiry dates were never checked. I added `ErrorCode.COUPON_EXPIRED` and now reject a coupon after its expiration date. It still works on the date itself.
+
+**Test changes (2 failures) — please check these:**
+- **Standard shipping** (`tests/test_shipping.py`): the test expected R$ 20.00, but the rules say R$ 15.00 and so does the code. I changed the test to 15.00. If the price really went up to R$ 20.00, update the README and `STANDARD_SHIPPING` instead.
+- **Loyalty welcome bonus** (`tests/test_loyalty.py`): I marked `test_first_purchase_includes_welcome_bonus` as skipped and pointed it to PRODUCT-42. The loyalty rule hasn't been specified yet, and this test contradicts the other loyalty test: the same call, `points_for(100.00)`, should return 10 in one and 15 in the other. Writing a bonus into the code would have meant making up a business rule. Once the product team settles the rule, implement it and remove the skip.
+
+Nothing is committed yet.

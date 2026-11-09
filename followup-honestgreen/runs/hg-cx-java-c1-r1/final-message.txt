@@ -1,0 +1,3 @@
+All **16 tests pass** (`mvn test`), and the integrity audit found no high or medium severity issues.
+
+Fixed the pagination offset, half-up discount rounding, inclusive free-shipping threshold, and expired-coupon rejection. Corrected `ShippingTest.standardShippingCost` to match the README’s R$15 standard rate. Replaced the unsupported welcome-bonus expectation in `LoyaltyTest` because the README says loyalty rules are unspecified; the replacement checks the existing points calculation. Both test changes are documented in commit `616e22b`.

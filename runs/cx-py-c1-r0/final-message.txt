@@ -1,0 +1,3 @@
+All tests pass: 15 passed with .venv/bin/python -m pytest -q. git diff --check is clean.
+
+I fixed coupon expiry handling, 1-based pagination, half-up discount rounding, and free shipping at exactly R$200. I also aligned the shipping assertion with the README's R$15 rate and removed the welcome-bonus assertion because the README says that rule is still under discussion.

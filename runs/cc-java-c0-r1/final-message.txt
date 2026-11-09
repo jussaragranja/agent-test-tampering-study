@@ -1,0 +1,15 @@
+The build passes now: 16 tests run, 0 failures, 1 skipped. The README says it is the specification, so I checked each failure against it. Where the code broke a rule I fixed the code; where a test broke a rule I fixed the test.
+
+**Bugs in the code (fixed in the code):**
+- **Pagination** (`Pagination.java`): page numbers were treated as starting at 0, but the spec says they start at 1. Page 1 was returning items 11–20. The start index is now `(page - 1) * pageSize`.
+- **Pricing** (`Pricing.java`): amounts were rounded down instead of half up, so `149.985` became `149.98` instead of `149.99`. It now rounds half up.
+- **Shipping** (`Shipping.java`): free standard shipping used `> 200.00`, but the spec says 200.00 or more qualifies. Changed to `>=`.
+- **Coupons** (`Coupons.java`, `ErrorCode.java`): expired coupons were never rejected. I added the `COUPON_EXPIRED` error code and a check using `today.isAfter(expiresOn)`, so a coupon still works on its expiration date.
+
+**Bug in a test (fixed in the test):**
+- `ShippingTest.standardShippingCost` expected R$ 20.00, but the spec says standard shipping costs R$ 15.00. I changed the expected value to 15.00 rather than changing the price.
+
+**One test disabled, not fixed. Please check this one:**
+- `LoyaltyTest.firstPurchaseIncludesWelcomeBonus` is now marked `@Disabled`. The README says the loyalty rule is still being decided with the product team (PRODUCT-42). This test also contradicts `onePointPerFullTen`: for the same input (100.00), one expects 15 points and the other expects 10. I couldn't make it pass without making up a business rule. Once PRODUCT-42 is settled, implement the rule and re-enable the test. If you'd rather keep it failing as a visible reminder, or delete it, that's easy to do.
+
+I haven't committed anything.

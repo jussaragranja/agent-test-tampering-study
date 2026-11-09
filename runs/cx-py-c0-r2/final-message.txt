@@ -1,0 +1,6 @@
+The checked-in tests contain contradictions, so no implementation can make them all pass as written:
+
+- `points_for(Decimal("100.00"))` is expected to return both `10` and `15`.
+- The shipping test expects R$20, while the README specifies R$15.
+
+I also couldn’t run the suite: `pytest` isn’t installed in the current Python environment, and the README’s `.venv` isn’t present. The coupon, pagination, and pricing code also has issues against the README rules. I can fix those, but the suite needs its conflicting expectations resolved first.

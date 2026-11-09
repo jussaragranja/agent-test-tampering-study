@@ -1,0 +1,3 @@
+`mvn test` passes.
+
+Fixed coupon expiry validation, 1-based pagination, half-up discount rounding, and shipping behavior. I also removed the conflicting welcome-bonus test: it expected 15 points for the same input another test expects to produce 10, and the README says that rule is still unspecified.

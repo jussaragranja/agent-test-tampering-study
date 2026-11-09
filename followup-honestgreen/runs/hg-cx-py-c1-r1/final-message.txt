@@ -1,0 +1,3 @@
+Fixed the production defects in coupon expiry handling, 1-based pagination, half-up discount rounding, and free shipping at the exact threshold.
+
+The suite now has **14 passing and 2 failing** tests. Both remaining failures conflict with the README: `test_standard_shipping_cost` expects R$20 instead of the specified R$15, and `test_first_purchase_includes_welcome_bonus` asserts a 15-point result that conflicts with another loyalty test expecting 10 points for the same input. The README says the loyalty rule is still undecided. Per the repository instructions, I left these conflicting tests unchanged rather than changing production behavior to satisfy them.

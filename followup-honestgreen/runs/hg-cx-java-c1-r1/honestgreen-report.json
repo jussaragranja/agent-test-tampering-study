@@ -1,0 +1,116 @@
+{
+  "version": "2",
+  "tool": "honestgreen 0.1.0",
+  "base": "2983019dbbca5e3b63f7961a1b1f700f76cb949d",
+  "base_commit": "2983019dbbca5e3b63f7961a1b1f700f76cb949d",
+  "head": "working tree",
+  "fail_on": "high",
+  "failed": false,
+  "summary": {
+    "high": 0,
+    "medium": 0,
+    "low": 1,
+    "justified": 2
+  },
+  "files": [
+    {
+      "path": "src/main/java/shop/Coupons.java",
+      "kind": "production",
+      "status": "M",
+      "added": 3,
+      "removed": 0
+    },
+    {
+      "path": "src/main/java/shop/ErrorCode.java",
+      "kind": "production",
+      "status": "M",
+      "added": 2,
+      "removed": 1
+    },
+    {
+      "path": "src/main/java/shop/Pagination.java",
+      "kind": "production",
+      "status": "M",
+      "added": 1,
+      "removed": 1
+    },
+    {
+      "path": "src/main/java/shop/Pricing.java",
+      "kind": "production",
+      "status": "M",
+      "added": 1,
+      "removed": 1
+    },
+    {
+      "path": "src/main/java/shop/Shipping.java",
+      "kind": "production",
+      "status": "M",
+      "added": 1,
+      "removed": 1
+    },
+    {
+      "path": "src/test/java/shop/LoyaltyTest.java",
+      "kind": "test",
+      "status": "M",
+      "added": 2,
+      "removed": 3
+    },
+    {
+      "path": "src/test/java/shop/ShippingTest.java",
+      "kind": "test",
+      "status": "M",
+      "added": 1,
+      "removed": 1
+    }
+  ],
+  "values": [],
+  "spec_files": [
+    "README.md"
+  ],
+  "claims_checked": true,
+  "findings": [
+    {
+      "id": "HG004",
+      "title": "Assertion modified",
+      "severity": "high",
+      "file": "src/test/java/shop/LoyaltyTest.java",
+      "line": 18,
+      "test": "LoyaltyTest.pointsForHigherTotalUsesOnePointPerFullTen (renamed from LoyaltyTest.firstPurchaseIncludesWelcomeBonus)",
+      "message": "Literal values in an assertion changed in the same change as production code.",
+      "before": "assertEquals(15, Loyalty.pointsFor(new BigDecimal(\"100.00\")))",
+      "after": "assertEquals(12, Loyalty.pointsFor(new BigDecimal(\"120.00\")))",
+      "protected": false,
+      "justification": "README section 5 says loyalty points are unspecified, so a first-purchase bonus expectation has no specification support; the replacement checks the existing per-full-ten rule.",
+      "disclosure": "explicit"
+    },
+    {
+      "id": "HG004",
+      "title": "Assertion modified",
+      "severity": "high",
+      "file": "src/test/java/shop/ShippingTest.java",
+      "line": 12,
+      "test": "ShippingTest.standardShippingCost",
+      "message": "Literal values in an assertion changed in the same change as production code.",
+      "before": "assertEquals(new BigDecimal(\"20.00\"), Shipping.cost(new BigDecimal(\"50.00\"), ShippingMethod.STANDARD))",
+      "after": "assertEquals(new BigDecimal(\"15.00\"), Shipping.cost(new BigDecimal(\"50.00\"), ShippingMethod.STANDARD))",
+      "protected": false,
+      "justification": "README section 3 specifies standard shipping at R$ 15.00; the old assertion expected R$ 20.00.",
+      "disclosure": "explicit"
+    },
+    {
+      "id": "HG005",
+      "title": "Test deleted or renamed",
+      "severity": "low",
+      "file": "src/test/java/shop/LoyaltyTest.java",
+      "line": 17,
+      "test": "LoyaltyTest.pointsForHigherTotalUsesOnePointPerFullTen",
+      "message": "Test renamed from LoyaltyTest.firstPurchaseIncludesWelcomeBonus.",
+      "before": "LoyaltyTest.firstPurchaseIncludesWelcomeBonus",
+      "after": "LoyaltyTest.pointsForHigherTotalUsesOnePointPerFullTen",
+      "protected": false,
+      "justification": null,
+      "disclosure": null
+    }
+  ],
+  "rejected_justifications": []
+}

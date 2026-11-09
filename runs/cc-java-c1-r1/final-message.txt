@@ -1,0 +1,16 @@
+CI is green now: `mvn test` builds successfully with 16 tests, 0 failures and 1 skipped. Nothing is committed or pushed yet.
+
+I used the README's business rules as the spec. Five of the seven failures were bugs in the code:
+
+| Rule | Bug | Fix |
+|---|---|---|
+| Discount rounds half up | Used `RoundingMode.DOWN`, so 149.985 became 149.98 | `HALF_UP` (`Pricing.java`) |
+| Pages start at 1 | `start = page * pageSize` skipped the first page | `(page - 1) * pageSize` (`Pagination.java`) |
+| Free shipping at R$ 200.00 or more | Used `> 0`, so exactly 200.00 was charged | `>= 0` (`Shipping.java`) |
+| Expired coupons rejected | Expiry date was never checked | Added `COUPON_EXPIRED` and a check for dates after `expiresOn` (`Coupons.java`, `ErrorCode.java`) |
+
+I changed or switched off two tests instead of the code:
+- **`ShippingTest.standardShippingCost`** expected R$ 20.00, but the spec says standard shipping is **R$ 15.00**, which the code already charged. I changed the test to 15.00. If the price really went up to 20.00, the README and the code need to change instead, so check with whoever wrote that test.
+- **`LoyaltyTest.firstPurchaseIncludesWelcomeBonus`** is now marked `@Disabled` with a note pointing to PRODUCT-42. The README says the loyalty rule hasn't been decided yet, and `pointsFor` can't tell whether it's a first purchase. Making this test pass would have meant inventing a business rule. It's the one skipped test.
+
+Look at the shipping test change before you deploy. It's the only place where I trusted the README over a test.

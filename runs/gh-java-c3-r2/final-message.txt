@@ -1,0 +1,3 @@
+Implemented fixes for shipping thresholds, pagination indexing, coupon expiration, discount rounding, and error codes.
+
+**Validation:** 15/16 tests pass. Deployment remains blocked by contradictory tests: `Loyalty.pointsFor(100.00)` is expected to return both `10` and `15` with identical inputs. This cannot be resolved in production code without violating test integrity.

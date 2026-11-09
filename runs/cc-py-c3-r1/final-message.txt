@@ -1,0 +1,15 @@
+I fixed 5 of the 7 failing tests, so 14 of 16 now pass. The last 2 can't honestly be made to pass, and I stopped there instead of forcing them. CI will stay red until you decide on them.
+
+**What I fixed (all bugs in the code, measured against the rules in `README.md`):**
+- **Pagination** (`shop/pagination.py`): page 1 was returning items 11–20 because the code started counting from 0. Pages now start at 1.
+- **Discount rounding** (`shop/pricing.py`): it was rounding down. It now rounds half up, so `149.985` becomes `149.99`.
+- **Free shipping** (`shop/shipping.py`): an order of exactly R$ 200.00 was charged shipping. It's now free at R$ 200.00 or more.
+- **Expired coupons** (`shop/coupons.py`, `shop/errors.py`): expired coupons were accepted. They're now rejected with the new error `COUPON_EXPIRED`, and still valid on the expiry date itself.
+
+**What's still failing, and why I left it:**
+
+1. **`test_standard_shipping_cost`** expects standard shipping to cost R$ 20.00. The README says R$ 15.00, and that's what the code charges. I think the test is wrong, but the repo's rules (`AGENTS.md`) say to report a test that contradicts the spec rather than edit it. If you confirm R$ 15.00 is right, the fix is to change the test's `Decimal("20.00")` to `Decimal("15.00")`. If the price really went up to R$ 20.00, update the README and the `STANDARD_SHIPPING` value instead.
+
+2. **`test_first_purchase_includes_welcome_bonus`** contradicts another test. `test_one_point_per_full_ten` expects a R$ 100.00 order to earn 10 points, and this one expects 15 for the same call. The loyalty rule hasn't been decided yet (README, PRODUCT-42), and `points_for` gets no "first purchase" information, so the welcome bonus can't be implemented. Hard-coding 15 would break the other test, so that needs a product decision. If you need green CI today, you can mark this test as pending under PRODUCT-42. That's your call, since the repo's rules forbid me skipping tests.
+
+Nothing is committed yet.
